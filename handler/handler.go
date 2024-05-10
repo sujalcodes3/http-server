@@ -7,14 +7,6 @@ import (
 	"github.com/sujalcodes3/http-server/util"
 )
 
-const (
-    GET = "GET"
-    POST = "POST"
-    PUT = "PUT"
-    PATCH = "PATCH"
-    DELETE = "DELETE"
-)
-
 type Request struct {
     requestData *parser.ParseResult
     conn net.Conn
@@ -24,6 +16,14 @@ type Response struct {}
 
 func (r * Request) HandleRequest() {
     conn := r.conn          
+
+    switch r.requestData.GetMethod() {
+    case parser.GET:
+    case parser.PUT:
+    case parser.POST:
+    case parser.DELETE:
+    case parser.PATCH:
+    }
 
     defer conn.Close()
 

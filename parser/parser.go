@@ -2,6 +2,15 @@ package parser
 
 import "fmt"
 
+const (
+    GET = "GET"
+    POST = "POST"
+    PUT = "PUT"
+    PATCH = "PATCH"
+    DELETE = "DELETE"
+)
+
+
 type Parser struct {
 	message []byte
 
@@ -34,6 +43,14 @@ func New(msg []byte) *Parser {
     p := &Parser{ message: msg, next: 0, ptr: -1 }
     p.advPtr()
 	return p
+}
+
+func (p * ParseResult) GetObject() * ParseResult {
+    return p 
+}
+
+func (p * ParseResult) GetMethod() string {
+    return p.info.Method
 }
 
 func (p *ParseResult) PrintParseResult() {
@@ -123,7 +140,20 @@ func (p * Parser) skipWs() {
 func (p * Parser) parseInfo() *RequestInfo {
     res := &RequestInfo{}
     
-    res.Method = p.nextToken()
+    method := p.nextToken()
+    switch method {
+    case "GET":
+        res.Method = GET
+    case "PATCH":
+        res.Method = PATCH
+    case "PUT":
+        res.Method = PUT
+    case "DELETE":
+        res.Method = DELETE
+    case "POST":
+        res.Method = POST
+    }
+
     res.Route = p.nextToken()[1:]
     res.ProtocolVersion = p.nextToken()
 
